@@ -64,10 +64,40 @@ Now anything I load after can use the uHaul functions.  In my external module I 
   // The money ohh yea
   myHaul = new uHaul();
   myHaul.init(myPackage);
-  myHaul.checkLoad();
+  myHaul.checkLoad(function(){ //Callback after all of the files have been checked.
+    var myVariable = $('#myDiv').html();
+  });
 
-  var myVariable = $('#myDiv').html();
 ```
 What the above will do is parse your package and do a progressive load of any .js / .css files you have specified.  This means no duplication of file loading and also means that you can independently develop your external module without worrying.
+
+Now if we have our main project in to order:
+```HTML
+<head>
+  <link rel="stylesheet" href="css/getAbstract.min.css" />
+  <script src="js/uHaul.js"></script>
+  <script src="js/jquery-1.9.0.min.js"></script>
+  <script src="js/myAwesomeModule.js"></script>
+</head>
+```
+The jquery package only gets loaded once.  If now we needed a second package for our external modules:
+```javascript
+  //My required .js files for this module
+  var myPackage = {
+    'js':['js/jquery-1.9.0.min.js','http://cdn.yetanotherjsframework.js'],
+    'css':[],
+    ;'globals':[]
+  };
+
+  // The money ohh yea
+  myHaul = new uHaul();
+  myHaul.init(myPackage);
+  myHaul.checkLoad(function(){ //Callback after all of the files have been checked.
+    var myVariable = $('#myDiv').html();
+  });
+```
+
+The previous HTML file would STILL work since the module dynamically loads the extra file.
+
 
 Documentation and more examples to come!
